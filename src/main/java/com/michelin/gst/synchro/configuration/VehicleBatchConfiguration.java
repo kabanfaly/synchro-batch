@@ -3,7 +3,6 @@ package com.michelin.gst.synchro.configuration;
 import com.michelin.gst.synchro.BatchProperties;
 import com.michelin.gst.synchro.entity.Vehicle;
 import com.michelin.gst.synchro.reader.JsonFileListItemReader;
-import com.michelin.gst.synchro.repository.VehicleRepository;
 import com.michelin.gst.synchro.writer.DataWriter;
 import org.slf4j.Logger;
 import org.springframework.batch.core.BatchStatus;
@@ -20,6 +19,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import com.michelin.gst.synchro.dao.VehicleDAO;
 
 @Configuration
 public class VehicleBatchConfiguration {
@@ -58,8 +58,8 @@ public class VehicleBatchConfiguration {
   }
 
   @Bean
-  public ItemWriter<Vehicle> vehicleItemWriter(VehicleRepository vehicleRepository) {
-    return new DataWriter<>(vehicleRepository);
+  public ItemWriter<Vehicle> vehicleItemWriter(VehicleDAO vehicleDAO) {
+    return new DataWriter<>(vehicleDAO);
   }
 
   @Bean

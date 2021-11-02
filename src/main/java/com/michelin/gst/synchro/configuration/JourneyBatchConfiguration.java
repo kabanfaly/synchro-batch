@@ -3,7 +3,6 @@ package com.michelin.gst.synchro.configuration;
 import com.michelin.gst.synchro.BatchProperties;
 import com.michelin.gst.synchro.entity.Journey;
 import com.michelin.gst.synchro.reader.JsonFileListItemReader;
-import com.michelin.gst.synchro.repository.JourneyRepository;
 import com.michelin.gst.synchro.writer.DataWriter;
 import org.slf4j.Logger;
 import org.springframework.batch.core.BatchStatus;
@@ -20,6 +19,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import static org.slf4j.LoggerFactory.getLogger;
+import com.michelin.gst.synchro.dao.JourneyDAO;
 
 @Configuration
 public class JourneyBatchConfiguration {
@@ -58,8 +58,8 @@ public class JourneyBatchConfiguration {
   }
 
   @Bean
-  public ItemWriter<Journey> journeyItemWriter(JourneyRepository journeyRepository) {
-    return new DataWriter<>(journeyRepository);
+  public ItemWriter<Journey> journeyItemWriter(JourneyDAO journeyDAO) {
+    return new DataWriter<>(journeyDAO);
   }
 
   @Bean

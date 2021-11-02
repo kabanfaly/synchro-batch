@@ -19,9 +19,9 @@ spring:
 # Nombre de donnees par traitement lors du l'execution du batch
 batch:
   chunk: 100
-  # Cron de lecture ecriture qui s'execute toutes les 20 secondes
+  # Cron de lecture ecriture qui s'execute toutes les 15 minutes
   read-write:
-    cron: 0 0/5 * * * *
+    cron: 0 0/15 * * * *
   vehicle-json-path: src/main/resources/data/vehicles.json
   journey-json-path: src/main/resources/data/journeys.json
 
