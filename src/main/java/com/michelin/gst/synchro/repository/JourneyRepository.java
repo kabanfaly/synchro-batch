@@ -1,6 +1,6 @@
-package com.michelin.synchro.batch.repository;
+package com.michelin.gst.synchro.repository;
 
-import com.michelin.synchro.batch.model.Journey;
+import com.michelin.gst.synchro.entity.Journey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

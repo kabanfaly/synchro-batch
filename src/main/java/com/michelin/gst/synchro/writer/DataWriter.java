@@ -1,4 +1,4 @@
-package com.michelin.synchro.batch;
+package com.michelin.gst.synchro.writer;
 
 import java.util.List;
 import org.springframework.batch.item.ItemWriter;

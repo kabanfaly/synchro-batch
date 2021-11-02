@@ -1,4 +1,4 @@
-package com.michelin.synchro.batch;
+package com.michelin.gst.synchro.reader;
 
 
 import com.fasterxml.jackson.databind.DeserializationFeature;

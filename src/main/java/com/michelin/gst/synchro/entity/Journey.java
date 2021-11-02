@@ -1,4 +1,4 @@
-package com.michelin.synchro.batch.model;
+package com.michelin.gst.synchro.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
@@ -103,10 +103,7 @@ public class Journey implements Serializable {
         if (!Objects.equals(this._id, other._id)) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.id, other.id);
     }
     
     
