@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SynchoBatchApplication {
+public class SynchroBatchApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SynchoBatchApplication.class, args);
+        SpringApplication.run(SynchroBatchApplication.class, args);
     }
 
 }

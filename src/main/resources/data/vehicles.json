@@ -42,20 +42,6 @@
         "study": "Study3"
     },
     {
-        "_id": "5ef4914a12f7975dd6c62f57",
-        "vehicleId": "198494",
-        "tsp": "DANLAW",
-        "label": "6767KWV414",
-        "brand": "BYD ALEXANDER DENNIS",
-        "range": "12 MTS. 19000",
-        "model": "12 MTS. 19000",
-        "client": "ECHEMAR",
-        "project": "E-LCV",
-        "test": "CR2010FM",
-        "country": "Country4",
-        "study": "Study4"
-    },
-    {
         "_id": "5ed7595b12f7973d01a6a8cc",
         "vehicleId": "226231",
         "tsp": "DANLAW",

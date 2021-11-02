@@ -1,23 +1,25 @@
 package com.michelin.synchro.batch.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
 
 @Entity
 @Table(name = "vehicle")
+@JsonInclude(NON_NULL)
 public class Vehicle implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Column(name = "_id")
     private String _id;
 
-    
     @Column(name = "client")
     private String client;
 
@@ -47,14 +49,14 @@ public class Vehicle implements Serializable {
         this.id = id;
     }
 
-     public String get_Id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_Id(String _id) {
+    public void set_id(String _id) {
         this._id = _id;
-    }  
-    
+    }
+
     public String getClient() {
         return client;
     }
@@ -67,7 +69,6 @@ public class Vehicle implements Serializable {
         return vehicleId;
     }
 
-  
     public String getModel() {
         return model;
     }
@@ -137,5 +138,4 @@ public class Vehicle implements Serializable {
         return true;
     }
 
-    
 }

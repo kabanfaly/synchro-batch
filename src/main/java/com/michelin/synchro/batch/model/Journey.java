@@ -1,11 +1,14 @@
 package com.michelin.synchro.batch.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.*;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @Entity
 @Table(name = "journey")
+@JsonInclude(NON_NULL)
 public class Journey implements Serializable {
     
     private static final long serialVersionUID = 1L;
@@ -14,9 +17,8 @@ public class Journey implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @Column(name = "s_journey")
+    @Column(name = "_id")
     private String _id;
-
 
     @Column(name = "vid")
     private String vid;
@@ -38,11 +40,11 @@ public class Journey implements Serializable {
         this.id = id;
     }
 
-    public String get_Id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_Id(String _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }  
 
