@@ -6,16 +6,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public class DataWriter<T, R extends JpaRepository> implements ItemWriter<T> {
 
-    private final R repository;
+    private final R dao;
     
-    public DataWriter(R repository) {
-        this.repository = repository;
+    public DataWriter(R dao) {
+        this.dao = dao;
     }
 
     @Override
     public void write(List<? extends T> items) throws Exception {
-        items.stream().forEachOrdered(item -> {
-            repository.save(item);
+        items.stream().forEachOrdered(item -> {          
+            dao.save(item);
         });
     }
 }

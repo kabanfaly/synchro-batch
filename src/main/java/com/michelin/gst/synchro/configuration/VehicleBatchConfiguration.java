@@ -20,57 +20,87 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import com.michelin.gst.synchro.dao.VehicleDAO;
+import com.michelin.gst.synchro.file.FileArchiver;
+import java.util.List;
+import org.springframework.batch.core.step.tasklet.Tasklet;
+import org.springframework.util.StringUtils;
 
 @Configuration
 public class VehicleBatchConfiguration {
 
-  private static final Logger LOGGER = getLogger(VehicleBatchConfiguration.class);
+    private static final Logger LOGGER = getLogger(VehicleBatchConfiguration.class);
 
-  @Bean
-  public Job vehicleJob(JobBuilderFactory jobBuilderFactory, JobExecutionListenerSupport vehicleJobExecutionListenerSupport, Step vehicleStep) {
-    return jobBuilderFactory.get("vehicleJob")
-        .incrementer(new RunIdIncrementer())
-        .listener(vehicleJobExecutionListenerSupport)
-        .start(vehicleStep)
-        .build();
-  }
+    @Bean
+    public Job vehicleJob(JobBuilderFactory jobBuilderFactory, 
+        JobExecutionListenerSupport vehicleJobExecutionListenerSupport, 
+        Step vehicleStep,
+        Step moveVehiculeFileStep) {
+        return jobBuilderFactory.get("vehicleJob")
+            .incrementer(new RunIdIncrementer())
+            .listener(vehicleJobExecutionListenerSupport)
+            .start(vehicleStep)
+            .next(moveVehiculeFileStep)
+            .build();
+    }
 
-  @Bean("vehicleStep")
-  public Step vehicleStep(StepBuilderFactory stepBuilderFactory, PlatformTransactionManager platformTransactionManager,
-                          JsonFileListItemReader vehicleJsonReader,
-                          ItemWriter<Vehicle> writer, BatchProperties properties) {
-    return stepBuilderFactory
-        .get("vehicleStep")
-        .transactionManager(platformTransactionManager)
-        .<Vehicle, Vehicle>chunk(properties.chunk)
-        .reader(vehicleJsonReader)
-        .writer(writer)
-        .build();
-  }
+    @Bean("vehicleStep")
+    public Step vehicleStep(StepBuilderFactory stepBuilderFactory, PlatformTransactionManager platformTransactionManager,
+        JsonFileListItemReader vehicleJsonReader,
+        ItemWriter<Vehicle> writer, BatchProperties properties) {
+        return stepBuilderFactory
+            .get("vehicleStep")
+            .transactionManager(platformTransactionManager)
+            .<Vehicle, Vehicle>chunk(properties.chunk)
+            .reader(vehicleJsonReader)
+            .writer(writer)
+            .build();
+    }
 
-  @Bean("vehicleJsonReader")
-  public JsonFileListItemReader vehicleJsonReader(BatchProperties properties) {
-    FileSystemResource resource = new FileSystemResource(properties.vehicleJsonPath);
-    JsonFileListItemReader reader = new JsonFileListItemReader();
-    reader.setResource(resource);
-    reader.setClassToBound(Vehicle.class.getCanonicalName());
-    return reader;
-  }
+    @Bean
+    public Step moveVehiculeFileStep(StepBuilderFactory stepBuilderFactory, Tasklet vehiculeFileArchiver) {
+        return stepBuilderFactory.get("moveVehiculeFileStep")
+            .tasklet(vehiculeFileArchiver)
+            .build();
+    }
 
-  @Bean
-  public ItemWriter<Vehicle> vehicleItemWriter(VehicleDAO vehicleDAO) {
-    return new DataWriter<>(vehicleDAO);
-  }
+    @Bean("vehicleJsonReader")
+    public JsonFileListItemReader vehicleJsonReader(BatchProperties properties) {
+        FileSystemResource resource = new FileSystemResource(properties.vehicleJsonPath);
+        JsonFileListItemReader reader = new JsonFileListItemReader();
+        reader.setResource(resource);
+        reader.setClassToBound(Vehicle.class.getCanonicalName());
+        return reader;
+    }
 
-  @Bean
-  public JobExecutionListenerSupport vehicleJobExecutionListenerSupport() {
-    return new JobExecutionListenerSupport() {
-      @Override
-      public void afterJob(org.springframework.batch.core.JobExecution jobExecution) {
-        if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
-          LOGGER.info("!!! VEHICLE JOB FINISHED !!! ");
-        }
-      }
-    };
-  }
+    @Bean
+    public ItemWriter<Vehicle> vehicleItemWriter(VehicleDAO vehicleDAO) {
+        return new DataWriter<>(vehicleDAO) {
+            @Override
+            public void write(List<? extends Vehicle> items) throws Exception {
+                items.stream().forEachOrdered(item -> {
+                    if (StringUtils.hasLength(item.getBrand()) && StringUtils.hasLength(item.getModel())) {
+                        item.setBrandModel(item.getBrand() + item.getModel());
+                    }
+                    vehicleDAO.save(item);
+                });
+            }
+        };
+    }
+
+    @Bean
+    public JobExecutionListenerSupport vehicleJobExecutionListenerSupport() {
+        return new JobExecutionListenerSupport() {
+            @Override
+            public void afterJob(org.springframework.batch.core.JobExecution jobExecution) {
+                if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
+                    LOGGER.info("!!! VEHICLE JOB FINISHED !!! ");
+                }
+            }
+        };
+    }
+
+    @Bean
+    public Tasklet vehiculeFileArchiver(BatchProperties properties) {
+        return new FileArchiver(properties.vehicleJsonPath, properties.archivesPath);
+    }
 }

@@ -1,12 +1,14 @@
+server:
+  port: 8200
 spring:
   batch:
     jdbc:
       initialize-schema: always
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: root
-    password: kabapg
-    driver-class-name: org.postgresql.Driver
+    url: ${POSTGRESQL_URL:jdbc:postgresql://ddbrgbl0-pg.postgres.database.azure.com:5432/postgres}
+    driverClassName: org.postgresql.Driver
+    username: ${POSTGRESQL_USERNAME:dbruser@ddbrgbl0-pg}
+    password: ${POSTGRESQL_PASSWORD:uVbcynv3heQQ9yaD}
     hikari:
       connection-timeout: 20000
       maximum-pool-size: 5
@@ -14,14 +16,19 @@ spring:
     hibernate:
       ddl-auto: create
 
-
+gst:
+   # Cron de lecture ecriture qui s'execute toutes les 15 minutes
+   synchro-cron: ${DAILY_BATCH_CRON:0 */15 * * * *}
+   # Cron de verification pour la suppression des archive qui s'execute tous les jours a minuit
+   delete-achives-cron: ${ARCHIVES_DAILY_BATCH_CRON:0 0 * * * *}
+   
 ## Batch config
 # Nombre de donnees par traitement lors du l'execution du batch
 batch:
   chunk: 100
-  # Cron de lecture ecriture qui s'execute toutes les 15 minutes
-  read-write:
-    cron: 0 0/15 * * * *
+  # nombre de jours maximum pour la retention des archives
+  archives-nb-max-days: 10
+  archives-path: src/main/resources/data/archives/
   vehicle-json-path: src/main/resources/data/vehicles.json
   journey-json-path: src/main/resources/data/journeys.json
-
+ 

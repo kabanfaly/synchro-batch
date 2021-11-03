@@ -41,6 +41,12 @@ public class Vehicle implements Serializable {
     @Column(name = "brand")
     private String brand;
 
+    @Column(name = "project")
+    private String project;
+    
+    @Column(name = "brandModel")
+    private String brandModel;
+    
     public Long getId() {
         return id;
     }
@@ -107,6 +113,22 @@ public class Vehicle implements Serializable {
 
     public void setBrand(String brand) {
         this.brand = brand;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
+    }
+
+    public String getBrandModel() {
+        return brandModel;
+    }
+
+    public void setBrandModel(String brandModel) {
+        this.brandModel = brandModel;
     }
 
     @Override

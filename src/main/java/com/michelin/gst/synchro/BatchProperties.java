@@ -12,10 +12,16 @@ public class BatchProperties {
   public final String vehicleJsonPath;
 
   public final String journeyJsonPath;
+  
+  public final String archivesPath;
+  
+  public final Integer archivesNbMaxDays;
 
-  public BatchProperties(Integer chunk, String vehicleJsonPath, String journeyJsonPath) {
+  public BatchProperties(Integer chunk, String vehicleJsonPath, String journeyJsonPath, String archivesPath, Integer archivesNbMaxDays) {
     this.chunk = chunk;
     this.vehicleJsonPath = vehicleJsonPath;
     this.journeyJsonPath = journeyJsonPath;
+    this.archivesPath = archivesPath;
+    this.archivesNbMaxDays = archivesNbMaxDays;
   }
 }
