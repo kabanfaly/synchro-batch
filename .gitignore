@@ -33,3 +33,5 @@ build/
 .vscode/
 
 **/nbactions.xml
+**/archives/*.json
+**/tmp

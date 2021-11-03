@@ -15,11 +15,11 @@ public class FileArchiver implements Tasklet {
     private static final Logger LOGGER = LoggerFactory.getLogger(FileArchiver.class);
 
     private final String fileToMove;
-    private final String archivePath;
+    private final String archiveDirectory;
 
     public FileArchiver(String fileToMove, String archivePath) {
         this.fileToMove = fileToMove;
-        this.archivePath = archivePath;
+        this.archiveDirectory = archivePath;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class FileArchiver implements Tasklet {
             String currentTimeStr = LocalDateTime.now().format(formatter);
             String fileNameWithoutExtension = file.getName().replace(".json", "");
 
-            String archiveFileName = archivePath + File.separator + fileNameWithoutExtension + "-" + currentTimeStr + ".json";
+            String archiveFileName = archiveDirectory + File.separator + fileNameWithoutExtension + "-" + currentTimeStr + ".json";
 
             File archiveFile = new File(archiveFileName); // Le fichier dans l'archive (le meme fichier)
 

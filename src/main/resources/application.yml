@@ -19,16 +19,17 @@ spring:
 gst:
    # Cron de lecture ecriture qui s'execute toutes les 15 minutes
    synchro-cron: ${DAILY_BATCH_CRON:0 */15 * * * *}
-   # Cron de verification pour la suppression des archive qui s'execute tous les jours a minuit
-   delete-achives-cron: ${ARCHIVES_DAILY_BATCH_CRON:0 0 * * * *}
+   # Cron de verification pour la suppression des archives qui s'execute tous les jours a minuit
+   #clean-achives-cron: ${ARCHIVES_DAILY_BATCH_CRON:0/20 * * * * *}
+   clean-achives-cron: ${ARCHIVES_DAILY_BATCH_CRON:0 0 * * * *}
    
 ## Batch config
 # Nombre de donnees par traitement lors du l'execution du batch
 batch:
-  chunk: 100
-  # nombre de jours maximum pour la retention des archives
-  archives-nb-max-days: 10
-  archives-path: src/main/resources/data/archives/
-  vehicle-json-path: src/main/resources/data/vehicles.json
-  journey-json-path: src/main/resources/data/journeys.json
+  chunk: ${BATCH_CHUNK:100}
+  # nombre de jours maximums pour la retention des archives
+  archives-nb-max-days: ${ARCHIVE_NB_MAX_DAYS:10}
+  archives-directory: ${ARCHIVES_DIRECTORY:src/main/resources/data/archives/}
+  vehicle-json-path: ${VEHICULE_JSON_PATH:src/main/resources/data/vehicles.json}
+  journey-json-path: ${JOURNEY_JSON_PATH:src/main/resources/data/journeys.json}
  

@@ -101,6 +101,6 @@ public class VehicleBatchConfiguration {
 
     @Bean
     public Tasklet vehiculeFileArchiver(BatchProperties properties) {
-        return new FileArchiver(properties.vehicleJsonPath, properties.archivesPath);
+        return new FileArchiver(properties.vehicleJsonPath, properties.archivesDirectory);
     }
 }

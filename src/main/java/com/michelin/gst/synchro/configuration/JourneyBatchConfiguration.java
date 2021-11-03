@@ -89,6 +89,6 @@ public class JourneyBatchConfiguration {
 
     @Bean
     public Tasklet journeyFileArchiver(BatchProperties properties) {
-        return new FileArchiver(properties.journeyJsonPath, properties.archivesPath);
+        return new FileArchiver(properties.journeyJsonPath, properties.archivesDirectory);
     }
 }
