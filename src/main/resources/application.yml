@@ -33,3 +33,8 @@ batch:
   vehicle-json-path: ${VEHICULE_JSON_PATH:src/main/resources/data/vehicles.json}
   journey-json-path: ${JOURNEY_JSON_PATH:src/main/resources/data/journeys.json}
  
+azure:
+  storage:
+    account-key: <storage-account-access-key>
+    account-name: <storage-account-name>
+    blob-endpoint: <storage-endpoint-URL>

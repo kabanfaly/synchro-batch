@@ -13,9 +13,11 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -64,7 +66,7 @@ public class VehicleBatchConfiguration {
     }
 
     @Bean("vehicleJsonReader")
-    public JsonFileListItemReader vehicleJsonReader(BatchProperties properties) {
+    public JsonFileListItemReader vehicleJsonReader(BatchProperties properties,@Value("azure-blob://<your-container-name>/<your-blob-name>") Resource resource) {
         FileSystemResource resource = new FileSystemResource(properties.vehicleJsonPath);
         JsonFileListItemReader reader = new JsonFileListItemReader();
         reader.setResource(resource);

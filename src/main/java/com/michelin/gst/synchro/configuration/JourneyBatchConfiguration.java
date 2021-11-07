@@ -13,9 +13,11 @@ import org.springframework.batch.core.configuration.annotation.StepBuilderFactor
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -41,7 +43,8 @@ public class JourneyBatchConfiguration {
             .build();
     }
 
-    @Bean("journeyStep")
+    @SuppressWarnings("unchecked")
+	@Bean("journeyStep")
     public Step journeyStep(StepBuilderFactory stepBuilderFactory, PlatformTransactionManager platformTransactionManager,
         JsonFileListItemReader journeyJsonReader,
         ItemWriter<Journey> writer, BatchProperties properties) {
@@ -62,8 +65,7 @@ public class JourneyBatchConfiguration {
     }
 
     @Bean("journeyJsonReader")
-    public JsonFileListItemReader journeyJsonReader(BatchProperties properties) {
-        FileSystemResource resource = new FileSystemResource(properties.journeyJsonPath);
+    public JsonFileListItemReader journeyJsonReader(BatchProperties properties,  @Value("azure-blob://<your-container-name>/<your-blob-name>") Resource resource) {
         JsonFileListItemReader reader = new JsonFileListItemReader();
         reader.setResource(resource);
         reader.setClassToBound(Journey.class.getCanonicalName());

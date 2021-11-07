@@ -3,7 +3,7 @@ package com.michelin.gst.synchro;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
-@ConfigurationProperties(prefix = "batch")
+@ConfigurationProperties("batch")
 @ConstructorBinding
 public class BatchProperties {
 
