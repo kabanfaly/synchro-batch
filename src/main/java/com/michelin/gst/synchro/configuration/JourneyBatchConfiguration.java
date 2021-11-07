@@ -1,6 +1,7 @@
 package com.michelin.gst.synchro.configuration;
 
 import com.michelin.gst.synchro.BatchProperties;
+import com.michelin.gst.synchro.azure.BlocStorageFileManager;
 import com.michelin.gst.synchro.entity.Journey;
 import com.michelin.gst.synchro.reader.JsonFileListItemReader;
 import com.michelin.gst.synchro.writer.DataWriter;
@@ -16,7 +17,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -29,6 +29,9 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 public class JourneyBatchConfiguration {
 
     private static final Logger LOGGER = getLogger(JourneyBatchConfiguration.class);
+
+    @Value("${batch.journey-json-path}")
+    private Resource resource;
 
     @Bean
     public Job journeyJob(JobBuilderFactory jobBuilderFactory, 
@@ -65,7 +68,7 @@ public class JourneyBatchConfiguration {
     }
 
     @Bean("journeyJsonReader")
-    public JsonFileListItemReader journeyJsonReader(BatchProperties properties,  @Value("azure-blob://<your-container-name>/<your-blob-name>") Resource resource) {
+    public JsonFileListItemReader journeyJsonReader() {
         JsonFileListItemReader reader = new JsonFileListItemReader();
         reader.setResource(resource);
         reader.setClassToBound(Journey.class.getCanonicalName());
@@ -87,6 +90,11 @@ public class JourneyBatchConfiguration {
                 }
             }
         };
+    }
+
+    @Bean
+    public BlocStorageFileManager journeyBlocStorageFileManager(Resource resource) {
+        return new BlocStorageFileManager(resource);
     }
 
     @Bean

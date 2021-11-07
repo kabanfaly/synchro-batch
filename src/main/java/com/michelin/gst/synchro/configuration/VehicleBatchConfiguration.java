@@ -16,7 +16,6 @@ import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -31,6 +30,9 @@ import org.springframework.util.StringUtils;
 public class VehicleBatchConfiguration {
 
     private static final Logger LOGGER = getLogger(VehicleBatchConfiguration.class);
+
+    @Value("${batch.vehicle-json-path}")
+    private Resource resource;
 
     @Bean
     public Job vehicleJob(JobBuilderFactory jobBuilderFactory, 
@@ -66,8 +68,7 @@ public class VehicleBatchConfiguration {
     }
 
     @Bean("vehicleJsonReader")
-    public JsonFileListItemReader vehicleJsonReader(BatchProperties properties,@Value("azure-blob://<your-container-name>/<your-blob-name>") Resource resource) {
-        FileSystemResource resource = new FileSystemResource(properties.vehicleJsonPath);
+    public JsonFileListItemReader vehicleJsonReader() {
         JsonFileListItemReader reader = new JsonFileListItemReader();
         reader.setResource(resource);
         reader.setClassToBound(Vehicle.class.getCanonicalName());
@@ -78,7 +79,7 @@ public class VehicleBatchConfiguration {
     public ItemWriter<Vehicle> vehicleItemWriter(VehicleDAO vehicleDAO) {
         return new DataWriter<>(vehicleDAO) {
             @Override
-            public void write(List<? extends Vehicle> items) throws Exception {
+            public void write(List<? extends Vehicle> items) {
                 items.stream().forEachOrdered(item -> {
                     if (StringUtils.hasLength(item.getBrand()) && StringUtils.hasLength(item.getModel())) {
                         item.setBrandModel(item.getBrand() + item.getModel());

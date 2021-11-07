@@ -1,6 +1,5 @@
 package com.michelin.gst.synchro.reader;
 
-
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
@@ -52,18 +51,17 @@ public class JsonFileListItemReader extends AbstractItemCountingItemStreamItemRe
      * @return string corresponding to logical record according to
      * {@link #setRecordSeparatorPolicy(RecordSeparatorPolicy)} (might span
      * multiple lines in file).
-     * @throws java.lang.Exception
      */
     @Override
-    protected Object doRead() throws Exception {
+    protected Object doRead() {
         return (this.items == null || index >= this.items.size()) ? null : this.items.get(index++);
     }
 
     @Override
-    protected void doClose() throws Exception {}
+    protected void doClose() {}
 
     @Override
-    protected void doOpen() throws Exception {
+    protected void doOpen() {
         Assert.notNull(resource, "Input resource must be set");
 
         if (!resource.exists()) {

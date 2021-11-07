@@ -29,9 +29,9 @@ batch:
   chunk: ${BATCH_CHUNK:100}
   # nombre de jours maximums pour la retention des archives
   archives-nb-max-days: ${ARCHIVE_NB_MAX_DAYS:10}
-  archives-directory: ${ARCHIVES_DIRECTORY:src/main/resources/data/archives/}
-  vehicle-json-path: ${VEHICULE_JSON_PATH:src/main/resources/data/vehicles.json}
-  journey-json-path: ${JOURNEY_JSON_PATH:src/main/resources/data/journeys.json}
+  archives-directory: ${ARCHIVES_DIRECTORY:azure-blob://<your-container-name>/<your-blob-name>/archives/}
+  vehicle-json-path: ${VEHICULE_JSON_PATH:azure-blob://<your-container-name>/<your-blob-name>}
+  journey-json-path: ${JOURNEY_JSON_PATH:azure-blob://<your-container-name>/<your-blob-name>}
  
 azure:
   storage:
